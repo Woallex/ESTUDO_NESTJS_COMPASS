@@ -8,13 +8,14 @@ import {
     Post,
     Put,
 } from '@nestjs/common';
+import { CreateUserDTO } from './dto/createUser.dto';
 
 // ↓ Ligado ao user.module.ts (users)
 @Controller('users')
 export class UserController {
     @Post()
-    create(@Body() body) {
-        return { body };
+    create(@Body() { email, name, password }: CreateUserDTO) {
+        return { email, name, password };
     }
 
     //Listar vários registros
@@ -31,12 +32,12 @@ export class UserController {
 
     @Put(':id')
     upadate(@Body() body, @Param() params) {
-        method: ('put', body, params);
+        return {body, params};
     }
 
     @Patch(':id')
     upadateParcial(@Body() body, @Param() params) {
-        method: ('patch', body, params);
+        return {body, params};;
     }
 
     @Delete(':id')
