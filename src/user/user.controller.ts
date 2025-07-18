@@ -9,6 +9,8 @@ import {
     Put,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/createUser.dto';
+import { UpdatePutUserDTO } from './dto/updatePutUser.dto';
+import { UpdatePatchUserDTO } from './dto/updatePatchUser.dto';
 
 // ↓ Ligado ao user.module.ts (users)
 @Controller('users')
@@ -31,13 +33,21 @@ export class UserController {
     }
 
     @Put(':id')
-    upadate(@Body() body, @Param() params) {
-        return {body, params};
+    upadate(@Body() { email, name, password }: UpdatePutUserDTO, @Param() params) {
+        return {
+            method: 'put',
+            email, name, password,
+            params,
+        };
     }
 
     @Patch(':id')
-    upadateParcial(@Body() body, @Param() params) {
-        return {body, params};;
+    upadateParcial(@Body() { email, name, password }: UpdatePatchUserDTO, @Param() params) {
+        return {
+            method: 'put',
+            email, name, password,
+            params,
+        };
     }
 
     @Delete(':id')
