@@ -4,13 +4,14 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Patch,
     Post,
     Put,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/createUser.dto';
-import { UpdatePutUserDTO } from './dto/updatePutUser.dto';
 import { UpdatePatchUserDTO } from './dto/updatePatchUser.dto';
+import { UpdatePutUserDTO } from './dto/updatePutUser.dto';
 
 // ↓ Ligado ao user.module.ts (users)
 @Controller('users')
@@ -28,32 +29,33 @@ export class UserController {
 
     //      ↓ Nome que aprarece no parametro
     @Get(':id')
-    show(@Param() params) {
-        return { user: {}, params };
+    show(@Param('id', ParseIntPipe) id: number) {
+        return { user: {}, id };
     }
 
     @Put(':id')
-    upadate(@Body() { email, name, password }: UpdatePutUserDTO, @Param() params) {
+    upadate(@Body() { email, name, password }: UpdatePutUserDTO, @Param('id', ParseIntPipe) id: number) {
         return {
             method: 'put',
             email, name, password,
-            params,
+            id
         };
     }
 
     @Patch(':id')
-    upadateParcial(@Body() { email, name, password }: UpdatePatchUserDTO, @Param() params) {
+    upadateParcial(@Body() { email, name, password }: UpdatePatchUserDTO, @Param('id', ParseIntPipe) id: number) {
         return {
             method: 'put',
             email, name, password,
-            params,
+            id
         };
     }
 
     @Delete(':id')
-    delete(@Param() params) {
+    //O ParseIntPipe transforma o id em number
+    delete(@Param('id', ParseIntPipe) id: number) {
         return {
-            params,
+            id
         };
     }
 }
