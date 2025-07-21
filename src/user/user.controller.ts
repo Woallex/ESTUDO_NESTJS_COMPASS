@@ -12,13 +12,17 @@ import {
 import { CreateUserDTO } from './dto/createUser.dto';
 import { UpdatePatchUserDTO } from './dto/updatePatchUser.dto';
 import { UpdatePutUserDTO } from './dto/updatePutUser.dto';
+import { UserService } from './user.server';
 
 // ↓ Ligado ao user.module.ts (users)
 @Controller('users')
 export class UserController {
+
+    constructor(private readonly userService: UserService){}
+
     @Post()
-    create(@Body() { email, name, password }: CreateUserDTO) {
-        return { email, name, password };
+    async create(@Body() data: CreateUserDTO) {
+        return this.userService.create( data );
     }
 
     //Listar vários registros
