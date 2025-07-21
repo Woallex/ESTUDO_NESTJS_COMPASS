@@ -27,14 +27,14 @@ export class UserController {
 
     //Listar vários registros
     @Get()
-    list() {
-        return { users: [] };
+    async list() {
+        return this.userService.list();
     }
 
     //      ↓ Nome que aprarece no parametro
     @Get(':id')
     show(@Param('id', ParseIntPipe) id: number) {
-        return { user: {}, id };
+        return this.userService.show(id);
     }
 
     @Put(':id')

@@ -14,4 +14,18 @@ export class UserService {
             }
         })
     }
+
+    // Encontra todos os dados no BD
+    async list() {
+        return this.prisma.users.findMany();
+    }
+
+    //Encontrando dados pelo id
+    async show(id: number){
+        return this.prisma.users.findUnique({
+            where: {
+                id,
+            }
+        });
+    }
 }
