@@ -50,4 +50,13 @@ export class UserService {
             }
         });
     }
+
+    // Deletar dados
+    async delete(id: number){
+        return this.prisma.users.delete({
+            where: {
+                id
+            }
+        })
+    }
 }

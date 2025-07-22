@@ -50,8 +50,6 @@ export class UserController {
     @Delete(':id')
     //O ParseIntPipe transforma o id em number
     delete(@Param('id', ParseIntPipe) id: number) {
-        return {
-            id
-        };
+        return this.userService.delete(id);
     }
 }
