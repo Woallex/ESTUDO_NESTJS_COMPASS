@@ -72,7 +72,11 @@ export class UserService {
     //Criando metodo para ser reutilizado
     async exists(id: number){
         //Colocando uma mensagem de erro para uma exceção, quando o id não existir ele mostrar a mensagem.
-        if (!(await this.show(id))){
+        if (!(await this.prisma.users.count({
+            where: {
+                id
+            }
+        }))){
             throw new NotFoundException(`O usuário ${id} não existe.`)
         }
     }
