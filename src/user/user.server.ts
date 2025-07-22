@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserDTO } from "./dto/createUser.dto";
 import { PrismaServece } from "src/prisma/prismaservece";
+import { UpdatePutUserDTO } from "./dto/updatePutUser.dto";
+import { UpdatePatchUserDTO } from "./dto/updatePatchUser.dto";
 
 @Injectable()
 export class UserService {
@@ -25,6 +27,26 @@ export class UserService {
         return this.prisma.users.findUnique({
             where: {
                 id,
+            }
+        });
+    }
+
+    // Atulaizar o BD, espera que todos os dados sejam informados
+    async update(id: number, data: UpdatePutUserDTO){
+        return this.prisma.users.update({
+            data,
+            where: {
+                id
+            }
+        });
+    }
+
+    // Atulaizar o BD, os dados podem ser informados parcialmente
+    async updatePartial(id: number, data: UpdatePatchUserDTO){
+        return this.prisma.users.update({
+            data,
+            where: {
+                id
             }
         });
     }

@@ -33,26 +33,18 @@ export class UserController {
 
     //      ↓ Nome que aprarece no parametro
     @Get(':id')
-    show(@Param('id', ParseIntPipe) id: number) {
+    async  show(@Param('id', ParseIntPipe) id: number) {
         return this.userService.show(id);
     }
 
     @Put(':id')
-    upadate(@Body() { email, name, password }: UpdatePutUserDTO, @Param('id', ParseIntPipe) id: number) {
-        return {
-            method: 'put',
-            email, name, password,
-            id
-        };
+    async upadate(@Body() data: UpdatePutUserDTO, @Param('id', ParseIntPipe) id: number) {
+        return this.userService.update(id, data);
     }
 
     @Patch(':id')
-    upadateParcial(@Body() { email, name, password }: UpdatePatchUserDTO, @Param('id', ParseIntPipe) id: number) {
-        return {
-            method: 'put',
-            email, name, password,
-            id
-        };
+    async upadateParcial(@Body() data: UpdatePatchUserDTO, @Param('id', ParseIntPipe) id: number) {
+        return this.userService.updatePartial(id,data);
     }
 
     @Delete(':id')
