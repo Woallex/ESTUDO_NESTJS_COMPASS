@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDTO } from "./dto/createUser.dto";
 import { PrismaServece } from "src/prisma/prismaservece";
 import { UpdatePutUserDTO } from "./dto/updatePutUser.dto";
@@ -33,6 +33,9 @@ export class UserService {
 
     // Atulaizar o BD, espera que todos os dados sejam informados
     async update(id: number, data: UpdatePutUserDTO){
+
+        await this.exists(id);
+
         return this.prisma.users.update({
             data,
             where: {
@@ -43,6 +46,9 @@ export class UserService {
 
     // Atulaizar o BD, os dados podem ser informados parcialmente
     async updatePartial(id: number, data: UpdatePatchUserDTO){
+
+        await this.exists(id);
+
         return this.prisma.users.update({
             data,
             where: {
@@ -53,10 +59,22 @@ export class UserService {
 
     // Deletar dados
     async delete(id: number){
+
+        await this.exists(id);
+
         return this.prisma.users.delete({
             where: {
                 id
             }
         })
     }
+
+    //Criando metodo para ser reutilizado
+    async exists(id: number){
+        //Colocando uma mensagem de erro para uma excessão, quando o id não existir ele mostrar a mensagem.
+        if (!(await this.show(id))){
+            throw new NotFoundException(`O usuário ${id} não existe.`)
+        }
+    }
+
 }
