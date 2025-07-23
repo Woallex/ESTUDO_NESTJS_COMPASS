@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, Req } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { AuthLoginDTO } from "./auth-login.dto";
 import { AuthRegisterDTO } from "./auth-register.dto";
 import { AuthForgetDTO } from "./auth-forget.dto";
@@ -6,6 +6,7 @@ import { AuthResetDTO } from "./auth-reset.dto";
 import { UserService } from "src/user/user.server";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "src/guards/auth.guard";
+import { User } from "src/decorators/user.decorator";
 
 @Controller('auth')
 export class AuthController{
@@ -36,9 +37,11 @@ export class AuthController{
     }
 
     // rota teste
+    // Conexão com o decorators/user.decorator.ts
     @UseGuards(AuthGuard)
     @Post('me')
-    async me(@Req() req){
-        return {me: 'ok', data: req.tokenPayload};
+    // Filtarando os dados pelo email decorators/user.decorator.ts
+    async me(@User('email') user){
+        return { user};
     }
 }
