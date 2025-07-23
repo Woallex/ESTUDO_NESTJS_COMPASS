@@ -1,10 +1,11 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards, Req } from "@nestjs/common";
 import { AuthLoginDTO } from "./auth-login.dto";
 import { AuthRegisterDTO } from "./auth-register.dto";
 import { AuthForgetDTO } from "./auth-forget.dto";
 import { AuthResetDTO } from "./auth-reset.dto";
 import { UserService } from "src/user/user.server";
 import { AuthService } from "./auth.service";
+import { AuthGuard } from "src/guards/auth.guard";
 
 @Controller('auth')
 export class AuthController{
@@ -34,8 +35,10 @@ export class AuthController{
         return this.authService.reset(password, token);
     }
 
+    // rota teste
+    @UseGuards(AuthGuard)
     @Post('me')
-    async me(@Body() body){
-        return this.authService.checkToken(body.token);
+    async me(@Req() req){
+        return {me: 'ok', data: req.tokenPayload};
     }
 }

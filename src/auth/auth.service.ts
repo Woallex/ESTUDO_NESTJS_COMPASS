@@ -17,7 +17,7 @@ export class AuthService {
     private readonly userService: UserService
   ) {}
 
-  async createToken(user: users) {
+  createToken(user: users) {
     return {
       accessToken: this.jwtService.sign(
         {
@@ -36,7 +36,7 @@ export class AuthService {
     };
   }
 
-  async checkToken(token: string) {
+  checkToken(token: string) {
       // TODO: Implementar verificação de token e trantando erro (token inválido)
     try{
       const data = this.jwtService.verify(token , {
@@ -46,6 +46,15 @@ export class AuthService {
       return data;
     } catch(e){
       throw new BadRequestException(e);
+    }
+  }
+
+  isValidToken(token: string){
+    try {
+      this.checkToken(token);
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
