@@ -13,6 +13,7 @@ model users {
   name       String    @db.VarChar(63)
   email      String    @db.VarChar(127)
   password   String    @db.VarChar(127)
+  role       Int       @default(1)
   created_At DateTime? @default(now()) @db.DateTime(0)
   updateAt   DateTime? @default(now()) @db.DateTime(0)
 }
