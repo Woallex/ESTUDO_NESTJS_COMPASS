@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { users } from "generated/prisma";
 import { PrismaServece } from "src/prisma/prismaservece";
@@ -7,6 +7,10 @@ import { UserService } from "src/user/user.server"; // ajuste no import, se nece
 
 @Injectable()
 export class AuthService {
+
+  private issuer = "login"
+  private audience = "users"
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaServece,
@@ -22,18 +26,27 @@ export class AuthService {
           email: user.email,
         },
         {
+          // tempo limite de uso do token
           expiresIn: "7 days",
           subject: String(user.id),
-          issuer: "login",
-          audience: "users",
+          issuer: this.issuer,
+          audience: this.audience,
         }
       ),
     };
   }
 
   async checkToken(token: string) {
-    // TODO: Implementar verificação de token
-    // return this.jwtService.verify(token);
+      // TODO: Implementar verificação de token e trantando erro (token inválido)
+    try{
+      const data = this.jwtService.verify(token , {
+        audience: this.audience,
+        issuer: this.issuer,
+      });
+      return data;
+    } catch(e){
+      throw new BadRequestException(e);
+    }
   }
 
   async login(email: string, password: string) {
